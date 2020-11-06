@@ -1,4 +1,4 @@
-# commander
+# command
 This is a simple command-line framework that I devised while writing a "very secret" project.
 
 ## Status
