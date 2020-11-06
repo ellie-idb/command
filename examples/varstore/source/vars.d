@@ -12,7 +12,6 @@ class VarStore {
     string getVar(string[] args) {
         string varName = args[0];
         if (auto var = varName in variables) {
-            writeln(varName, ": ", *var);
             return *var;
         }
         else {

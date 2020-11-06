@@ -182,6 +182,12 @@ class CommandInterpreter {
         return "";
     }
 
+    string print(string[] args) {
+        import std.algorithm.iteration : each;
+        args.each!((a) => writeln(a));
+        return "";
+    }
+
     void run() {
         reader.run();
     }
@@ -203,8 +209,8 @@ class CommandInterpreter {
         gCommandInterpreter = new CommandInterpreter();
         gCommandInterpreter.registerCommand(Command("help", "Display a listing of every registered function"), &gCommandInterpreter.help);
         gCommandInterpreter.registerCommand(Command("quit", "Quit the REPL."), &gCommandInterpreter.quit);
+        gCommandInterpreter.registerCommand(Command("print", "Write something to the console.", 0, 99), &gCommandInterpreter.print);
     }
-
 }
 
 
