@@ -1,4 +1,4 @@
-module commands.variables;
+module vars;
 import commands.uda;
 import std.stdio;
 
@@ -7,6 +7,7 @@ class VarStore {
         string[string] variables;
     }
 
+@CommandNamespace("var"):
     @Command("get", "Get a variable from the temporary store", 1, 1) 
     string getVar(string[] args) {
         string varName = args[0];
@@ -29,4 +30,3 @@ class VarStore {
 }
 
 mixin RegisterModule!VarStore;
-

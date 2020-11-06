@@ -42,7 +42,6 @@ class CommandInterpreter {
         CmdTableEntry[string][string] commandTable;
     }
 
-
     void interpret(string line) {
         auto tree = CommandParser(line); 
 
@@ -153,9 +152,10 @@ class CommandInterpreter {
 
     /+ built-in functions +/
     string help(string[] args) {
-        foreach(ns; commandTable.keys) {
+        import std.algorithm.sorting;
+        foreach(ns; commandTable.keys.sort!("a > b")) {
             writeln("namespace ", ns, ":");
-            foreach(entryName; commandTable[ns].keys) {
+            foreach(entryName; commandTable[ns].keys.sort!("a < b")) {
                 auto entry = commandTable[ns][entryName];
                 writef("\t%s:\n", entryName);
                 if (entry.desc != "")

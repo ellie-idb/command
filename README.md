@@ -4,6 +4,15 @@ This is a simple command-line framework that I devised while writing a "very sec
 ## Status
 Currently, this package has not been published on the `dub` repository. Subject to change.
 
+## Design Goals:
+- Lightweight
+    - Minimal dependencies (only 1!!)
+- Portable
+    - Parser reads in from stdin, but that's easy to change & make better
+- Easy to use
+    - The use of UDAs here helps a *ton*
+
+
 ## Examples
 ```d
 class TestExample {
@@ -37,4 +46,6 @@ Hello, Foo!
 - Small standard library for ease of use
     - No user-defined functions however
         - By design, we're not trying to be a scripting engine
+- Well-defined instantiation order
+    - In the end, this won't matter (since you can't call *until* the engine has been fully initialized), but might be worth investigating
 - Command history

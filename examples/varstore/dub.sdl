@@ -1,0 +1,7 @@
+name "varstore"
+description "A minimal D application."
+authors "Harrison Ford"
+copyright "Copyright © 2020, Harrison Ford"
+targetType "executable"
+license "proprietary"
+dependency "command" version="*" path="../../"

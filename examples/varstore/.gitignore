@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/varstore
+varstore.so
+varstore.dylib
+varstore.dll
+varstore.a
+varstore.lib
+varstore-test-*
+*.exe
+*.o
+*.obj
+*.lst

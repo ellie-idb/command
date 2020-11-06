@@ -1,6 +1,15 @@
 name "grammar"
-description "A minimal D application."
+description "Generator for the command grammar"
 authors "Harrison Ford"
 copyright "Copyright © 2020, Harrison Ford"
 license "proprietary"
 dependency "pegged" version="~>0.4.4"
+
+preBuildCommands "./generateGrammar.sh"
+configuration "lib" {
+    targetType "none"
+}
+
+configuration "exe" {
+    targetType "executable"
+}

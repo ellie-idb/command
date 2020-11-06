@@ -6,7 +6,7 @@ docs/
 command_test.so
 command_test.dylib
 command_test.dll
-command_test.a
+*.a
 command_test.lib
 command_test-test-*
 *.exe

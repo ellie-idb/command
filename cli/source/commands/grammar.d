@@ -3,12 +3,13 @@ This module was automatically generated from the following grammar:
 
 
 CommandParser:
-    # Parens are optional if there's no args
     Primary < FunctionCall
+    # Parens are optional if there's no args
     FunctionCall < FunctionIdentifier (Args / EmptyArgs)?
     FunctionIdentifier < FunctionNamespace? Function
     FunctionNamespace < identifier :'.'
     Function < identifier
+    # TO-DO: Expand this further
     ArgTypes < String / HexLiteral / Number / FunctionCall
     Args <- :'(' Line(ArgTypes, ',') :')'
     EmptyArgs <- :'(' :')'

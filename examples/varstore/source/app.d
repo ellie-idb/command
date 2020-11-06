@@ -1,5 +1,4 @@
-import std.stdio;
-import commands;
+import commands : gCommandInterpreter;
 
 void main()
 {
