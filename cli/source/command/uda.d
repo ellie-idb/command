@@ -1,4 +1,4 @@
-module commands.uda;
+module command.uda;
 
 alias CommandType = string delegate(string[]);
 
@@ -23,7 +23,7 @@ struct Command {
 mixin template RegisterModule(T) {
     mixin("__gshared T " ~ T.stringof ~ "Singleton;");
     shared static this() {
-        import commands : gCommandInterpreter;
+        import command : gCommandInterpreter;
         import std.traits;
         mixin(T.stringof ~ "Singleton = new T();");
         static foreach(m; __traits(allMembers, T)) {{

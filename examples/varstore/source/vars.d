@@ -1,5 +1,5 @@
 module vars;
-import commands.uda;
+import command.uda;
 import std.stdio;
 
 class VarStore {

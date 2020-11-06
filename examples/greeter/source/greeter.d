@@ -1,5 +1,5 @@
 module greeter;
-import commands.uda;
+import command.uda;
 
 class Greeter {
 @CommandNamespace("hello"):

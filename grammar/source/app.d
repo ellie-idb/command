@@ -1,8 +1,8 @@
-module commands.grammar;
+module command.grammar;
 import pegged.grammar;
 
 void main() {
-    asModule("commands.grammar", "../cli/source/commands/grammar", `
+    asModule("command.grammar", "../cli/source/command/grammar", `
 CommandParser:
     Primary < FunctionCall
     # Parens are optional if there's no args

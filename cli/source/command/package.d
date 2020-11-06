@@ -1,7 +1,7 @@
-module commands;
+module command;
 import pegged.grammar;
-import commands.grammar;
-import commands.uda;
+public import command.grammar;
+public import command.uda;
 import core.thread;
 import core.sync.mutex;
 import deimos.linenoise;

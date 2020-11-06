@@ -1,4 +1,4 @@
-import commands : gCommandInterpreter;
+import command : gCommandInterpreter;
 
 void main()
 {
