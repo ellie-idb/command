@@ -3,7 +3,6 @@ This is a simple command-line framework that I devised while writing a "very sec
 
 ## Status
 Currently, this package has not been published on the `dub` repository. Subject to change.
-
 ## Design Goals:
 - Lightweight
     - Minimal dependencies (only 1!!)
@@ -11,8 +10,6 @@ Currently, this package has not been published on the `dub` repository. Subject 
     - Parser reads in from stdin, but that's easy to change & make better
 - Easy to use
     - The use of UDAs here helps a *ton*
-
-
 ## Examples
 ```d
 class TestExample {
