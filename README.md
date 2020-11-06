@@ -2,7 +2,8 @@
 This is a simple command-line framework that I devised while writing a "very secret" project.
 
 ## Status
-Currently, this package has not been published on the `dub` repository. Subject to change.
+This library is still in-dev.
+
 ## Design Goals:
 - Lightweight
     - Minimal dependencies (only 1!!)
