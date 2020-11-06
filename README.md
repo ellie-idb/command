@@ -19,6 +19,8 @@ class TestExample {
         return "Hello, " ~ args[0] ~ "!";
     }
 }
+
+mixin RegisterModule!TestExample;
 ```
 then, in the CLI:
 ```
