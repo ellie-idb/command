@@ -5,7 +5,7 @@ docs/
 /command_test
 command_test.so
 command_test.dylib
-source/commands/grammar.d
+source/command/grammar.d
 command_test.dll
 *.a
 command_test.lib
