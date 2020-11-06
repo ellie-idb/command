@@ -1,6 +1,7 @@
 {
 	"fileVersion": 1,
 	"versions": {
+		"linenoise": "1.1.0+1.0.0",
 		"pegged": "0.4.4"
 	}
 }

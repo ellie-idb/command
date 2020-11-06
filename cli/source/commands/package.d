@@ -4,6 +4,7 @@ import commands.grammar;
 import commands.uda;
 import core.thread;
 import core.sync.mutex;
+import deimos.linenoise;
 import std.stdio, std.string;
 import std.format;
 import std.traits;
@@ -22,16 +23,14 @@ private:
     }
 
     void run() {
-        string line;
-        while (!terminate) {
-            stdout.writef("> ");
-            line = stdin.readln().strip();
-            if (line is null) {
-                writeln("Caught EOF");
-                terminate = true;
-            } else {
-                gCommandInterpreter.interpret(line);
+        char* line;
+        import core.stdc.string, core.stdc.stdlib;
+        while (!terminate && (line = linenoise("> ")) !is null) {
+            if (line[0] != '\0') {
+                linenoiseHistoryAdd(line);
+                gCommandInterpreter.interpret(line.fromStringz.idup);
             }
+            free(line);
         }
     }
 }
@@ -126,17 +125,17 @@ class CommandInterpreter {
                 // ditto
                 auto f = *_f;
                 if (args.length < f.minArgs) { 
-                    throw new Exception(format!"Expected at least %d arguments, got %d\n"(f.minArgs, args.length));
+                    throw new Exception(format!"Expected at least %d arguments, got %d"(f.minArgs, args.length));
                 }
                 if (args.length > f.maxArgs) {
-                    throw new Exception(format!"Expected at most %d arguments, got %d\n"(f.maxArgs, args.length));
+                    throw new Exception(format!"Expected at most %d arguments, got %d"(f.maxArgs, args.length));
                 }
 
                 return f.cmd(args);
             }
-            throw new Exception(format!"Could not find command %s\n"(func));
+            throw new Exception(format!"Could not find command %s"(func));
         }
-        throw new Exception(format!"Could not find namespace %s\n"(ns));
+        throw new Exception(format!"Could not find namespace %s"(ns));
     }
 
 
@@ -153,15 +152,26 @@ class CommandInterpreter {
     /+ built-in functions +/
     string help(string[] args) {
         import std.algorithm.sorting;
-        foreach(ns; commandTable.keys.sort!("a > b")) {
+        void printEntry(string name, CmdTableEntry cmd) {
+            writef("\t%s:\n", name);
+            if (cmd.desc != "")
+                writef("\t\t%s\n", cmd.desc);
+            writef("\t\tmin args: %d, max args: %d\n", cmd.minArgs, cmd.maxArgs);
+        }
+
+        void printNamespace(string ns) {
             writeln("namespace ", ns, ":");
             foreach(entryName; commandTable[ns].keys.sort!("a < b")) {
                 auto entry = commandTable[ns][entryName];
-                writef("\t%s:\n", entryName);
-                if (entry.desc != "")
-                    writef("\t\t%s\n", entry.desc);
-                writef("\t\tmin args: %d, max args: %d\n", entry.minArgs, entry.maxArgs);
+                printEntry(entryName, entry);
             }
+        }
+
+        // global is always first
+        printNamespace("global");
+        foreach(ns; commandTable.keys.sort!("a < b")) {
+            if (ns == "global") continue;
+            printNamespace(ns);
         }
         return "";
     }
