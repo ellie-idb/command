@@ -1,0 +1,6 @@
+name "greeter"
+description "A minimal D application."
+authors "Harrison Ford"
+copyright "Copyright © 2020, Harrison Ford"
+license "WTFPL"
+dependency "command" version="*" path="../../"

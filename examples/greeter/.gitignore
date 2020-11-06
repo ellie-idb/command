@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/greeter
+greeter.so
+greeter.dylib
+greeter.dll
+greeter.a
+greeter.lib
+greeter-test-*
+*.exe
+*.o
+*.obj
+*.lst
