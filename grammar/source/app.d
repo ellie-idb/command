@@ -11,7 +11,7 @@ CommandParser:
     FunctionNamespace < identifier :'.'
     Function < identifier
     # TO-DO: Expand this further
-    ArgTypes < String / HexLiteral / Number / FunctionCall
+    ArgTypes < String / HexLiteral / Number / Bool / FunctionCall
     Args <- :'(' Line(ArgTypes, ',') :')'
     EmptyArgs <- :'(' :')'
 
@@ -31,6 +31,7 @@ CommandParser:
     Hex      < ~([0-9a-fA-F]+)
     HexLiteral < '0x' Hex*
     Number   < ~([0-9]+)
+    Bool     < ('true' / 'false')
 
     Line(Elem, Sep = ' ') < Elem (:Sep Elem)*
     `);
