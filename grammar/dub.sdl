@@ -2,7 +2,7 @@ name "grammar"
 description "Generator for the command grammar"
 authors "Harrison Ford"
 copyright "Copyright © 2020, Harrison Ford"
-license "proprietary"
+license "WTFPL"
 dependency "pegged" version="~>0.4.4"
 configuration "lib" {
     targetType "none"
