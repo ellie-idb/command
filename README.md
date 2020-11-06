@@ -31,3 +31,10 @@ Hello, World!
 > test.user("Foo")
 Hello, Foo!
 ```
+## TODO:
+- Proper return types
+    - Avoid using strings as a type everywhere
+- Small standard library for ease of use
+    - No user-defined functions however
+        - By design, we're not trying to be a scripting engine
+- Command history
