@@ -172,9 +172,16 @@ class CommandInterpreter {
         return "";
     }
 
+    void run() {
+        reader.run();
+    }
+
+    void fork() {
+        reader.start();
+    }
+
     this() {
         reader = new CommandReaderThread();
-        reader.start();
     }
 
     ~this() {

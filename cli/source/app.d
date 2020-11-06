@@ -3,4 +3,5 @@ import commands;
 
 void main()
 {
+    gCommandInterpreter.run();
 }
