@@ -1,16 +1,26 @@
 # command
-This is a simple command-line framework that I devised while writing a "very secret" project.
+This is a simple command-line framework that I devised while writing a "very secret" project for an internship.
 
 ## Status
 This library is still in-dev.
 
+**PLEASE NOTE: By default, the library will *NOT* spawn a new thread and read from stdin. This functionality is *opt-in*, and you MUST compile the library with the `cli` version for this. This is done via:**
+```
+// dub.sdl
+subConfiguration "command" "cli"
+// dub.json
+"subConfigurations": {
+    "command": "cli"
+}
+    
+```
+**ADDITIONAL NOTE: Compiling the library with the `cli` will bring in `linenoise` as a dependency.** 
+
 ## Design Goals:
 - Lightweight
-    - Minimal dependencies (only 1!!)
+    - Minimal dependencies (only 2, but 1 is optional)
 - Portable
-    - Parser reads in from stdin, but that's easy to change & make better
 - Easy to use
-    - The use of UDAs here helps a *ton*
 ## Examples
 ```d
 class TestExample {
@@ -46,4 +56,5 @@ Hello, Foo!
         - By design, we're not trying to be a scripting engine
 - Well-defined instantiation order
     - In the end, this won't matter (since you can't call *until* the engine has been fully initialized), but might be worth investigating
-- Command history
+
+
