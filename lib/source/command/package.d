@@ -1,44 +1,16 @@
 module command;
-import pegged.grammar;
 public import command.grammar;
 public import command.uda;
-import core.thread;
-import core.sync.mutex;
-import deimos.linenoise;
-import std.stdio, std.string;
-import std.format;
-import std.traits;
+import pegged.grammar;
+import std.stdio, std.string, std.format, std.traits;
 
 __gshared CommandInterpreter gCommandInterpreter;
 
-class CommandReaderThread : Thread {
-    __gshared bool terminate;
-    this() {
-        super(&run);
-    }
-
-private:
-    void cls() {
-        writeln("\033[2J");
-    }
-
-    void run() {
-        char* line;
-        import core.stdc.string, core.stdc.stdlib;
-        while (!terminate && (line = linenoise("> ")) !is null) {
-            if (line[0] != '\0') {
-                linenoiseHistoryAdd(line);
-                gCommandInterpreter.interpret(line.fromStringz.idup);
-            }
-            free(line);
-        }
-    }
-}
-
 class CommandInterpreter {
+    version(cli) import command.cli : CommandReaderThread;
     private {
+        version(cli) CommandReaderThread reader;
         bool debug_ = false;
-        CommandReaderThread reader;
         CmdTableEntry[string][string] commandTable;
     }
 
@@ -190,11 +162,6 @@ class CommandInterpreter {
         return "";
     }
 
-    string quit(string[] args) {
-        reader.terminate = true;
-        stdin.close();
-        return "";
-    }
 
     string print(string[] args) {
         import std.algorithm.iteration : each;
@@ -202,28 +169,35 @@ class CommandInterpreter {
         return "";
     }
 
-    void run() {
-        reader.run();
-    }
+    version(cli) {
+        string quit(string[] args) {
+            reader.terminate = true;
+            stdin.close();
+            return "";
+        }
+        void run() {
+            reader.run();
+        }
 
-    void fork() {
-        reader.start();
+        void fork() {
+            reader.start();
+        }
     }
 
     this() {
-        reader = new CommandReaderThread();
+        version(cli) reader = new CommandReaderThread();
     }
 
     ~this() {
-        reader.terminate = true;
+        version(cli) reader.terminate = true;
     }
         
     shared static this() {
         import std.stdio;
         gCommandInterpreter = new CommandInterpreter();
+        version(cli) gCommandInterpreter.registerCommand(Command("quit", "Quit the REPL."), &gCommandInterpreter.quit);
         debug gCommandInterpreter.registerCommand(Command("debug", "Enable increased verbosity of the interpreter", 1, 1), &gCommandInterpreter.enableDebug);
         gCommandInterpreter.registerCommand(Command("help", "Display a listing of every registered function"), &gCommandInterpreter.help);
-        gCommandInterpreter.registerCommand(Command("quit", "Quit the REPL."), &gCommandInterpreter.quit);
         gCommandInterpreter.registerCommand(Command("print", "Write something to the console.", 0, 99), &gCommandInterpreter.print);
     }
 }

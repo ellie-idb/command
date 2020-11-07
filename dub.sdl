@@ -4,10 +4,13 @@ authors "Harrison Ford"
 copyright "Copyright © 2020, Harrison Ford"
 license "WTFPL"
 targetType "none"
-subPackage "./cli/"
+subPackage "./lib/"
 subPackage "./grammar/"
 subPackage "./examples/varstore/"
 subPackage "./examples/greeter/"
 dependency "command:lib" version="*"
-dependency "command:grammar" version="*"
-subConfiguration "command:grammar" "lib"
+
+configuration "cli" {
+    subConfiguration "command:lib" "cli"
+}
+
