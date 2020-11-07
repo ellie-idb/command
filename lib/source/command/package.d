@@ -31,7 +31,6 @@ class CommandInterpreter {
                 case "CommandParser.ArgTypes":
                     return parseToChild(c.children[0]);
                 case "CommandParser.FunctionCall":
-                    import std.string : split;
                     string[] args;
                     string ns = "global", func;
                     auto id = c.children[0];
