@@ -41,13 +41,14 @@ mixin RegisterModule!TestExample;
 ```
 then, in the CLI:
 ```
-> test.hello
-Hello, World!
 > test.hello()
 Hello, World!
 > test.user("Foo")
 Hello, Foo!
+> test.user(test.hello())
+Hello, Hello, World!!
 ```
+(also found in `command:greeter`)
 ## TODO:
 - Proper return types
     - Avoid using strings as a type everywhere
