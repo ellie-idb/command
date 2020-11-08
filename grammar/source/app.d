@@ -6,14 +6,14 @@ void main() {
 CommandParser:
     Primary < FunctionCall
     # Parens are optional if there's no args
-    FunctionCall < FunctionIdentifier (Args / EmptyArgs)?
+    FunctionCall < FunctionIdentifier (Args / EmptyArgs)
     FunctionIdentifier < FunctionNamespace? Function
     FunctionNamespace < identifier :'.'
     Function < identifier
     # TO-DO: Expand this further
-    ArgTypes < String / HexLiteral / Number / Bool / FunctionCall
-    Args <- :'(' Line(ArgTypes, ',') :')'
-    EmptyArgs <- :'(' :')'
+    ArgTypes < String / HexLiteral / Float / Number / Bool / FunctionCall
+    Args <- '(' Line(ArgTypes, ',') ')'
+    EmptyArgs <- '(' ')'
 
     # Base types taken from the PEGGED examples
     String <~ :doublequote (!doublequote Char)* :doublequote
@@ -31,6 +31,7 @@ CommandParser:
     Hex      < ~([0-9a-fA-F]+)
     HexLiteral < '0x' Hex*
     Number   < ~([0-9]+)
+    Float    < ~([0-9]+'.'[0-9]+)
     Bool     < ('true' / 'false')
 
     Line(Elem, Sep = ' ') < Elem (:Sep Elem)*

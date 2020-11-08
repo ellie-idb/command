@@ -9,6 +9,7 @@ greeter.dll
 greeter.a
 greeter.lib
 greeter-test-*
+command_greeter
 *.exe
 *.o
 *.obj

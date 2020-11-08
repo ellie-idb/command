@@ -17,12 +17,14 @@ class CommandInterpreter {
     void interpret(string line) {
         auto tree = CommandParser(line); 
 
+        if (debug_) writeln(tree);
         if (!tree.successful) {
             writeln("unable to parse");
             return;
         }
 
         bool caughtException = false;
+        import std.algorithm.iteration : joiner, each;
 
         string parseToChild(ParseTree c) {
             switch (c.name) {
@@ -40,9 +42,15 @@ class CommandInterpreter {
                     } else {
                         func = parseToChild(id.children[0]);
                     }
-                    if (c.children.length == 2) {
-                        // TODO: Optimize
-                        args = parseToChild(c.children[1]).split('\0');
+                    if (c.children.length == 2 && c.children[1].name == "CommandParser.Args") {
+                        string[] argsFromParseTree(ParseTree c) {
+                            string[] vals;
+                            foreach(item; c.children[0].children) {
+                                vals ~= parseToChild(item);
+                            }
+                            return vals;
+                        }
+                        args = argsFromParseTree(c.children[1]);
                     }
 
                     // bailout, avoid execution
@@ -65,6 +73,7 @@ class CommandInterpreter {
                 case "CommandParser.Number":
                 case "CommandParser.String":
                 case "CommandParser.Bool":
+                case "CommandParser.Float":
                     return c.matches[0];
                 case "CommandParser.HexLiteral":
                     return c.matches[0] ~ c.matches[1];
@@ -73,7 +82,6 @@ class CommandInterpreter {
                 case "CommandParser.Args":
                     // ugh, I hate this, but I have to join them
                     import std.conv : text;
-                    import std.algorithm.iteration : joiner, each;
 
                     auto list = c.children[0].children;
                     string[] vals;
@@ -85,7 +93,8 @@ class CommandInterpreter {
             }
         }
 
-        if (debug_) writeln(tree);
+
+
 
         parseToChild(tree);
     }
