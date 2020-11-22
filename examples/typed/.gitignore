@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/typed
+typed.so
+typed.dylib
+typed.dll
+typed.a
+typed.lib
+typed-test-*
+*.exe
+*.o
+*.obj
+*.lst

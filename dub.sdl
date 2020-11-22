@@ -8,6 +8,7 @@ subPackage "./lib/"
 subPackage "./grammar/"
 subPackage "./examples/varstore/"
 subPackage "./examples/greeter/"
+subPackage "./examples/typed/"
 dependency "command:lib" version="*"
 
 configuration "cli" {

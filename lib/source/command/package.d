@@ -123,6 +123,18 @@ class CommandInterpreter {
         throw new Exception(format!"Could not find namespace %s"(ns));
     }
 
+    void registerTypedCommand(string ns, TypedCommand info, CommandType shim) {
+        Command _i;
+        _i.name = info.name;
+        _i.desc = info.desc;
+        _i.minArgs = info.minArgs;
+        _i.maxArgs = info.maxArgs;
+        registerCommand(ns, _i, shim);
+    }
+
+    void registerTypedCommand(TypedCommand info, CommandType shim) {
+        registerTypedCommand("global", info, shim);
+    }
 
     void registerCommand(Command info, CommandType cmd) {
         registerCommand("global", info, cmd);

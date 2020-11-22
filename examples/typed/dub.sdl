@@ -1,0 +1,9 @@
+name "typed"
+description "A minimal D application."
+authors "Harrison Ford"
+copyright "Copyright © 2020, Harrison Ford"
+targetType "executable"
+license "WTFPL"
+dependency "command" version="*" path="../../"
+subConfiguration "command" "cli"
+
