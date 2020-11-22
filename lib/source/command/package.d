@@ -26,6 +26,7 @@ class CommandInterpreter {
         bool caughtException = false;
         import std.algorithm.iteration : joiner, each;
 
+        // XXX: this is subject to change
         string parseToChild(ParseTree c) {
             switch (c.name) {
                 case "CommandParser":

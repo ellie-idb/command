@@ -27,18 +27,20 @@ struct TypedCommand {
     int maxArgs = 0;
 }
 
-mixin template RegisterModule(T) {
-    mixin("__gshared T " ~ T.stringof ~ "Singleton;");
+mixin template RegisterModule(T) 
+if (is(T == class) || is(T == struct)) {
+    mixin("__gshared T " ~ T.mangleof ~ "Singleton;");
     shared static this() {
         import command : gCommandInterpreter;
         import std.traits;
-        mixin(T.stringof ~ "Singleton = new T();");
+        mixin(T.mangleof ~ "Singleton = new T();");
         static foreach(m; __traits(allMembers, T)) {{
             enum _namespace = () {
                 static if (hasUDA!(__traits(getMember, T, m), CommandNamespace)) {
                     return getUDAs!(__traits(getMember, T, m), CommandNamespace)[0].name;
+                } else {
+                    return "global";
                 }
-                return "global";
             }();
             enum cmdName = () {
                 static if (hasUDA!(__traits(getMember, T, m), Command)) {
@@ -51,17 +53,28 @@ mixin template RegisterModule(T) {
             }();
             static if (hasUDA!(__traits(getMember, T, m), Command)) {
                 pragma(msg, "command " ~ cmdName ~ ", namespace: " ~ _namespace);
-                gCommandInterpreter.registerCommand(_namespace, getUDAs!(__traits(getMember, T, m), Command), mixin("&" ~ T.stringof ~ "Singleton." ~ m));
+                gCommandInterpreter.registerCommand(_namespace, getUDAs!(__traits(getMember, T, m), Command), mixin("&" ~ T.mangleof ~ "Singleton." ~ m));
             } else static if (hasUDA!(__traits(getMember, T, m), TypedCommand)) {
                 pragma(msg, "typed command " ~ cmdName ~ ", namespace: " ~ _namespace);
                 // a little ugly, but it works
-                string typeConversionShim(string[] args) {
+                enum typeConversionShim = (string[] args) {
                     enum _paramCount = Parameters!(__traits(getMember, T, m)).length;
                     import std.conv : to;
+                    /* 
+                        XXX: this is also a hack, but it's the easiest way to generate the mixin that will automatically 
+                        convert string arguments to the desired arguments
+
+                        TODO: overhaul the parser to emit Variants so we don't have to do this
+                        string conversion nightmare
+                    */
+
                     enum _paramList = () {
                         string list = "(";
                         static foreach(i, param; Parameters!(__traits(getMember, T, m))) {
-                            list ~= "to!" ~ param.stringof ~ "(args[" ~ to!string(i) ~ "])";
+                            static assert(__traits(isPOD, param), "Cannot coerce arguments to complex types (struct, class, etc)");
+
+                            // XXX: this is a hack
+                            list ~= "to!(" ~ param.stringof ~ ")(args[" ~ to!string(i) ~ "])";
                             static if (i == (_paramCount - 1)) {
                                 list ~= ")";
                             } else {
@@ -70,10 +83,10 @@ mixin template RegisterModule(T) {
                         }
                         return list;
                     }();
-                    ReturnType!(__traits(getMember, T, m)) val = mixin(T.stringof ~ "Singleton." ~ m ~ _paramList);
+                    ReturnType!(__traits(getMember, T, m)) val = mixin(T.mangleof ~ "Singleton." ~ m ~ _paramList);
                     return to!string(val);
-                }
-                gCommandInterpreter.registerTypedCommand(_namespace, getUDAs!(__traits(getMember, T, m), TypedCommand), &typeConversionShim);
+                };
+                gCommandInterpreter.registerTypedCommand(_namespace, getUDAs!(__traits(getMember, T, m), TypedCommand), typeConversionShim);
             }
         }}
     }
