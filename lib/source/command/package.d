@@ -125,11 +125,7 @@ class CommandInterpreter {
     }
 
     void registerTypedCommand(string ns, TypedCommand info, CommandType shim) {
-        Command _i;
-        _i.name = info.name;
-        _i.desc = info.desc;
-        _i.minArgs = info.minArgs;
-        _i.maxArgs = info.maxArgs;
+        Command _i = Command(info.tupleof);
         registerCommand(ns, _i, shim);
     }
 
