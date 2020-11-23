@@ -22,6 +22,7 @@ subConfiguration "command" "cli"
 - Portable
 - Easy to use
 ## Examples
+### Untyped example:
 ```d
 class TestExample {
 @CommandNamespace("test"):
@@ -39,6 +40,31 @@ class TestExample {
 
 mixin RegisterModule!TestExample;
 ```
+### Typed example:
+```d
+class TestExample {
+@CommandNamespace("test"):
+    // example with no parameters
+    @TypedCommand("hello", "Hello, World!", 0, 0)
+    string hello() {
+        return "Hello, World!";
+    }
+
+    // any POD parameter is allowed here (float, string, double, integer, etc)
+    // as well, the return type may be any POD
+    @TypedCommand("user", "Say hello to someone!", 1, 1)
+    string hello_user(string user) {
+        return "Hello, " ~ user ~ "!";
+    }
+
+    @TypedCommand("meaning_of_life", "What is the meaning of life?", 0, 0)
+    int meaningOfLife() {
+        return 42;
+    }
+}
+```
+
+
 then, in the CLI:
 ```
 > test.hello()
